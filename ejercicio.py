@@ -102,6 +102,7 @@ def aumentar_valor_en(patron, cantidad):
 def eliminar_mayor_que(patron, mayor):
     registros = mostrar_por_patron(patron, False)
     hay_numericos = False
+    borrados = 0
     if registros:
         for registro in registros:
             if bd.get(registro).isdigit():
@@ -114,12 +115,15 @@ def eliminar_mayor_que(patron, mayor):
                     if bd.get(registro).isdigit() and float(bd.get(registro)) > mayor:
                         bd.delete(registro)
                         print(f'DELETED: [{registro} => {valor}]')
+                        borrados += 1
                 except:
                     print(f'ERROR DELETING ON [{registro}] => {valor}')
         else:
             print(f'No numeric values found for "{patron}" pattern')
     else:
         print('Nothing to delete')
+    if borrados == 0:
+        print(f'No values greater than {mayor} found for "{patron}" pattern')
         
 def insertar_json(json):
     try:
@@ -264,14 +268,20 @@ def ej10():
     
 #11 - Obtener y mostrar varios registros y filtrarlos por un valor en concreto. (0.5 puntos)
 def ej11():
-    valor_a_filtrar = 'Ariana Grande'
+    valor_a_filtrar = 'Ariana'
     claves = mostrar_por_patron('', False)
+    resultados = 0
     for clave in claves:
         tipo = bd.type(clave)
+        print(tipo) #debug
         if tipo == 'string':
             valor = bd.get(clave)
-            if valor == valor_a_filtrar:
+            print(valor) #debug
+            if valor_a_filtrar in valor:
                 print(f'[{clave} => {valor}]')
+                resultados += 1
+    if resultados == 0:
+        print(f'No results for "{valor_a_filtrar}"')
     li()
 
 #12 - Actualizar una serie de registros en base a un filtro (por ejemplo aumentar su valor en 1 )(0.5 puntos)
@@ -395,14 +405,14 @@ enunciados = {
 
 def mostrar_menu():
     os.system('cls' if os.name == 'nt' else 'clear')
-    print("\n--- Menu ---")
+    print('\n--- Menu ---')
     
     for i in range(1, 19):
-        print(f"{i}. {enunciados[i]}")
+        print(f'{i}. {enunciados[i]}')
     print("19. Exit")
     
 def pulsa_para_continuar():
-    input("Press Enter to continue...")
+    input('Press Enter to continue...')
     os.system('cls' if os.name == 'nt' else 'clear')
 
 pulsa_para_continuar()
@@ -410,18 +420,18 @@ pulsa_para_continuar()
 while True:
     mostrar_menu()
     try:
-        opcion = int(input("Select an option: "))
+        opcion = int(input('Select an option: '))
         print(opcion)
         if opcion == 19:
-            print("diabolico")
+            print('diabolico')
             break
         elif opcion in funciones:
             os.system('cls' if os.name == 'nt' else 'clear')
             print(opcion)
             funciones[opcion]()
         else:
-            print("Not a valid option")
+            print('Not a valid option')
     except ValueError:
-        print("Insert a valid number")
+        print('Insert a valid number, inserted:', opcion) #debug 11
         
     pulsa_para_continuar()
